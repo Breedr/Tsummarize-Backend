@@ -6,6 +6,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.ResponseEntity
@@ -22,6 +23,12 @@ import java.util.Collections.singletonList
 @RunWith(SpringRunner::class)
 @WebMvcTest(TsumController::class)
 class TsummarizeBackendApplicationTests {
+
+    @Value("\${tsummarize.http.auth-token-header}")
+    lateinit var principalRequestHeader: String
+
+    @Value("\${tsummarize.http.auth-token}")
+    lateinit var principalRequestValue: String
 
     @Autowired
     lateinit var mockMvc: MockMvc
@@ -48,7 +55,8 @@ class TsummarizeBackendApplicationTests {
 
         given(tsumController.getAllTsums()).willReturn(tsumList)
 
-        mockMvc.perform(get("/api/tsum"))
+        mockMvc.perform(
+                get("/api/tsum").header(principalRequestHeader, principalRequestValue))
                 .andExpect(status().isOk)
     }
 
@@ -57,7 +65,7 @@ class TsummarizeBackendApplicationTests {
 
         given(tsumController.getTsumById(tsum.id)).willReturn(ResponseEntity.ok(tsum))
 
-        mockMvc.perform(get("/api/tsum/{id}", tsum.id))
+        mockMvc.perform(get("/api/tsum/{id}", tsum.id).header(principalRequestHeader, principalRequestValue))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("id", isLong(tsum.id)))
 

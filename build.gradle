@@ -47,8 +47,10 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
     compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-security"
     compile "com.fasterxml.jackson.module:jackson-module-kotlin"
     compile "org.jetbrains.kotlin:kotlin-reflect"
     runtime "mysql:mysql-connector-java"
+
     testCompile "org.springframework.boot:spring-boot-starter-test"
 }
