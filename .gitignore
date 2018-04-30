@@ -25,4 +25,3 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
-application.properties
