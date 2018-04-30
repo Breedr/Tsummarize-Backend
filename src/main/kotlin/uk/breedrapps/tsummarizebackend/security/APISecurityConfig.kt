@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.web.util.matcher.RequestMatcher
 
 @PropertySource("classpath:application.properties")
 @Configuration
@@ -34,7 +35,9 @@ class APISecurityConfig: WebSecurityConfigurerAdapter() {
         }
 
         httpSecurity?.let {
-            it.antMatcher("/api/v1/**")
+
+            // Force use of API key
+            it.antMatcher("/api/**")
                     .csrf()
                     .disable()
                     .sessionManagement()
@@ -44,6 +47,12 @@ class APISecurityConfig: WebSecurityConfigurerAdapter() {
                     .authorizeRequests()
                     .anyRequest()
                     .authenticated()
+
+            // Force HTTPS
+            it.requiresChannel()
+                    .requestMatchers(RequestMatcher { r -> r.getHeader("X-Forwarded-Proto") != null })
+                    .requiresSecure()
+
         }
 
     }
