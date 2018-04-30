@@ -34,7 +34,7 @@ class APISecurityConfig: WebSecurityConfigurerAdapter() {
         }
 
         httpSecurity?.let {
-            it.antMatcher("/api/**")
+            it.antMatcher("/api/v1/**")
                     .csrf()
                     .disable()
                     .sessionManagement()
